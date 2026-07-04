@@ -1,13 +1,19 @@
 import requests
+import re
 
-# هذا هو رابط الصفحة التي تحتوي على البث
 url = "https://www.maspero.eg/stream/11"
 
-# هنا سنقوم بجلب محتوى الصفحة والبحث عن رابط البث
 try:
     response = requests.get(url)
-    # ملاحظة: هذا كود تجريبي، سنقوم بتطويره لاستخراج الرابط بدقة لاحقاً
-    print("تم الاتصال بنجاح!")
-    # سنضيف لاحقاً منطق استخراج رابط m3u8 وحفظه في ملف
+    # البحث عن الرابط الذي يحتوي على كلمة live وينتهي بـ m3u8
+    match = re.search(r'https://.*?live.*?\.m3u8', response.text)
+    
+    if match:
+        radio_link = match.group(0)
+        print("تم العثور على الرابط بنجاح:")
+        print(radio_link)
+    else:
+        print("لم يتم العثور على رابط البث، قد يكون هناك تحديث في الموقع.")
+        
 except Exception as e:
     print(f"حدث خطأ: {e}")
